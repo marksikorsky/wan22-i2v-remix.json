@@ -1,13 +1,6 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
 FROM runpod/worker-comfyui:5.5.0-base
 
-# install custom nodes into comfyui
-RUN comfy node install --exit-on-fail ComfyUI-WanVideoWrapper@1.4.3
-RUN comfy node install --exit-on-fail comfyui-wanvideowrapper@1.4.3
-RUN comfy node install --exit-on-fail comfyui-kjnodes@1.2.1
-RUN comfy node install --exit-on-fail comfyui-frame-interpolation@1.0.7
-RUN comfy node install --exit-on-fail comfyui-custom-scripts@1.2.5
-RUN comfy node install --exit-on-fail comfyui-easy-use@1.3.4
 RUN pip install --no-cache-dir boto3
 RUN pip install --no-cache-dir runpod
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -109,6 +102,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     protobuf-compiler \
     libopencv-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# install custom nodes into comfyui
+RUN comfy node install --exit-on-fail ComfyUI-WanVideoWrapper@1.4.3
+RUN comfy node install --exit-on-fail comfyui-wanvideowrapper@1.4.3
+RUN comfy node install --exit-on-fail comfyui-kjnodes@1.2.1
+RUN comfy node install --exit-on-fail comfyui-frame-interpolation@1.0.7
+RUN comfy node install --exit-on-fail comfyui-custom-scripts@1.2.5
+RUN comfy node install --exit-on-fail comfyui-easy-use@1.3.4
 
 # download models into comfyui
 RUN comfy model download --url https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors --relative-path models/vae --filename wan_2.1_vae.safetensors
