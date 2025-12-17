@@ -7,7 +7,6 @@ import requests
 import boto3
 import runpod
 
-
 # ---- Config ----
 COMFY_URL = os.environ.get("COMFY_URL", "http://127.0.0.1:8188")
 WORKFLOW_PATH = os.environ.get("WORKFLOW_PATH", "/comfyui/workflow.json")
