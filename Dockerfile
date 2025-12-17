@@ -8,6 +8,7 @@ RUN comfy node install --exit-on-fail comfyui-kjnodes@1.2.1
 RUN comfy node install --exit-on-fail comfyui-frame-interpolation@1.0.7
 RUN comfy node install --exit-on-fail comfyui-custom-scripts@1.2.5
 RUN comfy node install --exit-on-fail comfyui-easy-use@1.3.4
+RUN pip install --no-cache-dir boto3
 
 # download models into comfyui
 RUN comfy model download --url https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors --relative-path models/vae --filename wan_2.1_vae.safetensors
@@ -18,5 +19,11 @@ RUN comfy model download --url https://huggingface.co/FX-FeiHou/wan2.2-Remix/res
 RUN comfy model download --url https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/LoRAs/Wan22-Lightning/old/Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors --relative-path models/loras --filename Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors
 RUN comfy model download --url https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/LoRAs/Wan22-Lightning/old/Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors --relative-path models/loras --filename Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors
 
+COPY Wan22-I2V-Remix.json /comfyui/workflow.json
+COPY handler.py /handler.py
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
 # copy all input data (like images or videos) into comfyui (uncomment and adjust if needed)
 # COPY input/ /comfyui/input/
