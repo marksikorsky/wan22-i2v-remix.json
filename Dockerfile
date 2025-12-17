@@ -20,7 +20,7 @@ RUN comfy model download --url https://huggingface.co/FX-FeiHou/wan2.2-Remix/res
 RUN comfy model download --url https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/LoRAs/Wan22-Lightning/old/Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors --relative-path models/loras --filename Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors
 RUN comfy model download --url https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/LoRAs/Wan22-Lightning/old/Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors --relative-path models/loras --filename Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors
 
-COPY Wan22-I2V-Remix.json /comfyui/workflow.json
+COPY workflow_api.json /comfyui/workflow.json
 COPY handler.py /handler.py
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
