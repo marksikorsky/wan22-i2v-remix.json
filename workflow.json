@@ -1,7 +1,12 @@
 {
   "115": {
     "inputs": {
-      "filename": "rife47.pth",
+      "ckpt_name": "rife47.pth",
+      "clear_cache_after_n_frames": 50,
+      "multiplier": 2,
+      "fast_mode": true,
+      "ensemble": true,
+      "scale_factor": 1,
       "frames": [
         "158",
         0
@@ -9,12 +14,12 @@
     },
     "class_type": "RIFE VFI",
     "_meta": {
-      "title": "RIFE VFI"
+      "title": "RIFE VFI (recommend rife47 and rife49)"
     }
   },
   "116": {
     "inputs": {
-      "value": 32,
+      "fps": 32,
       "images": [
         "115",
         0
@@ -22,12 +27,15 @@
     },
     "class_type": "CreateVideo",
     "_meta": {
-      "title": "CreateVideo"
+      "title": "Создать видео"
     }
   },
   "117": {
     "inputs": {
-      "filename": "video/ComfyUI",
+      "filename_prefix": "video/ComfyUI",
+      "format": "auto",
+      "codec": "h264",
+      "video-preview": "",
       "video": [
         "116",
         0
@@ -35,48 +43,61 @@
     },
     "class_type": "SaveVideo",
     "_meta": {
-      "title": "SaveVideo"
+      "title": "Сохранить видео"
     }
   },
   "127": {
     "inputs": {
-      "text": "inductor"
+      "backend": "inductor",
+      "fullgraph": false,
+      "mode": "default",
+      "dynamic": false,
+      "dynamo_cache_size_limit": 64,
+      "compile_transformer_blocks_only": true,
+      "dynamo_recompile_limit": 128,
+      "force_parameter_static_shapes": false,
+      "allow_unmerged_lora_compile": false
     },
     "class_type": "WanVideoTorchCompileSettings",
     "_meta": {
-      "title": "WanVideoTorchCompileSettings"
+      "title": "WanVideo Torch Compile Settings"
     }
   },
   "128": {
     "inputs": {
-      "value": 20
+      "blocks_to_swap": 16,
+      "offload_img_emb": false,
+      "offload_txt_emb": false,
+      "use_non_blocking": false,
+      "vace_blocks_to_swap": 0,
+      "prefetch_blocks": 0,
+      "block_swap_debug": false
     },
     "class_type": "WanVideoBlockSwap",
     "_meta": {
-      "title": "WanVideoBlockSwap"
-    }
-  },
-  "129": {
-    "inputs": {
-      "filename": "Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors"
-    },
-    "class_type": "WanVideoLoraSelect",
-    "_meta": {
-      "title": "WanVideoLoraSelect"
+      "title": "WanVideo Block Swap"
     }
   },
   "130": {
     "inputs": {
-      "filename": "Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors"
+      "lora": "Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors",
+      "strength": 1,
+      "low_mem_load": false,
+      "merge_loras": false
     },
     "class_type": "WanVideoLoraSelect",
     "_meta": {
-      "title": "WanVideoLoraSelect"
+      "title": "WanVideo Lora Select"
     }
   },
   "131": {
     "inputs": {
-      "filename": "Wan2.2_Remix_NSFW_i2v_14b_high_lighting_v2.0.safetensors",
+      "model": "Wan2.2_Remix_NSFW_i2v_14b_high_lighting_v2.0.safetensors",
+      "base_precision": "fp16",
+      "quantization": "disabled",
+      "load_device": "offload_device",
+      "attention_mode": "comfy",
+      "rms_norm_function": "default",
       "compile_args": [
         "127",
         0
@@ -92,12 +113,17 @@
     },
     "class_type": "WanVideoModelLoader",
     "_meta": {
-      "title": "WanVideoModelLoader"
+      "title": "WanVideo Model Loader"
     }
   },
   "132": {
     "inputs": {
-      "filename": "Wan2.2_Remix_NSFW_i2v_14b_low_lighting_v2.0.safetensors",
+      "model": "Wan2.2_Remix_NSFW_i2v_14b_low_lighting_v2.0.safetensors",
+      "base_precision": "fp16",
+      "quantization": "disabled",
+      "load_device": "offload_device",
+      "attention_mode": "comfy",
+      "rms_norm_function": "default",
       "compile_args": [
         "127",
         0
@@ -105,24 +131,22 @@
       "block_swap_args": [
         "128",
         0
-      ],
-      "lora": [
-        "129",
-        0
       ]
     },
     "class_type": "WanVideoModelLoader",
     "_meta": {
-      "title": "WanVideoModelLoader"
+      "title": "WanVideo Model Loader"
     }
   },
   "133": {
     "inputs": {
-      "filename": "nsfw_wan_umt5-xxl_fp8_scaled.safetensors"
+      "clip_name": "nsfw_wan_umt5-xxl_fp8_scaled.safetensors",
+      "type": "wan",
+      "device": "default"
     },
     "class_type": "CLIPLoader",
     "_meta": {
-      "title": "CLIPLoader"
+      "title": "Загрузить CLIP"
     }
   },
   "134": {
@@ -164,12 +188,30 @@
     },
     "class_type": "WanVideoTextEmbedBridge",
     "_meta": {
-      "title": "WanVideoTextEmbedBridge"
+      "title": "WanVideo TextEmbed Bridge"
     }
   },
   "139": {
     "inputs": {
-      "value": 4,
+      "steps": [
+        "150",
+        0
+      ],
+      "cfg": 1,
+      "shift": 8,
+      "seed": 341512180989638,
+      "force_offload": true,
+      "scheduler": "euler",
+      "riflex_freq_index": 0,
+      "denoise_strength": 1,
+      "batched_cfg": false,
+      "rope_function": "comfy",
+      "start_step": 0,
+      "end_step": [
+        "151",
+        0
+      ],
+      "add_noise_to_samples": true,
       "model": [
         "131",
         0
@@ -181,24 +223,34 @@
       "text_embeds": [
         "138",
         0
-      ],
-      "steps": [
-        "150",
-        0
-      ],
-      "end_step": [
-        "151",
-        0
       ]
     },
     "class_type": "WanVideoSampler",
     "_meta": {
-      "title": "WanVideoSampler"
+      "title": "WanVideo Sampler"
     }
   },
   "140": {
     "inputs": {
-      "value": 4,
+      "steps": [
+        "150",
+        0
+      ],
+      "cfg": 1,
+      "shift": 8,
+      "seed": 941824044416901,
+      "force_offload": true,
+      "scheduler": "euler",
+      "riflex_freq_index": 0,
+      "denoise_strength": 1,
+      "batched_cfg": false,
+      "rope_function": "comfy",
+      "start_step": [
+        "151",
+        0
+      ],
+      "end_step": 10000,
+      "add_noise_to_samples": false,
       "model": [
         "132",
         0
@@ -214,19 +266,11 @@
       "samples": [
         "139",
         0
-      ],
-      "steps": [
-        "150",
-        0
-      ],
-      "start_step": [
-        "151",
-        0
       ]
     },
     "class_type": "WanVideoSampler",
     "_meta": {
-      "title": "WanVideoSampler"
+      "title": "WanVideo Sampler"
     }
   },
   "143": {
@@ -238,12 +282,12 @@
     },
     "class_type": "GetImageSize",
     "_meta": {
-      "title": "GetImageSize"
+      "title": "Get Image Size"
     }
   },
   "144": {
     "inputs": {
-      "filename": "(round(a / min(a,b) * c) // 16) * 16",
+      "expression": "(round(a / min(a,b) * c) // 16) * 16",
       "a": [
         "143",
         0
@@ -264,7 +308,7 @@
   },
   "145": {
     "inputs": {
-      "filename": "(round(b / min(a,b) * c) // 16) * 16",
+      "expression": "(round(b / min(a,b) * c) // 16) * 16",
       "a": [
         "143",
         0
@@ -294,11 +338,11 @@
   },
   "148": {
     "inputs": {
-      "image": "ComfyUI_00006_.png"
+      "image": "example.png"
     },
     "class_type": "LoadImage",
     "_meta": {
-      "title": "LoadImage"
+      "title": "Загрузить изображение"
     }
   },
   "150": {
@@ -321,15 +365,6 @@
   },
   "156": {
     "inputs": {
-      "value": 832,
-      "vae": [
-        "157",
-        0
-      ],
-      "start_image": [
-        "148",
-        0
-      ],
       "width": [
         "144",
         0
@@ -337,25 +372,48 @@
       "height": [
         "145",
         0
+      ],
+      "num_frames": 129,
+      "noise_aug_strength": 0,
+      "start_latent_strength": 1,
+      "end_latent_strength": 1,
+      "force_offload": true,
+      "fun_or_fl2v_model": false,
+      "tiled_vae": false,
+      "augment_empty_frames": 0,
+      "vae": [
+        "157",
+        0
+      ],
+      "start_image": [
+        "148",
+        0
       ]
     },
     "class_type": "WanVideoImageToVideoEncode",
     "_meta": {
-      "title": "WanVideoImageToVideoEncode"
+      "title": "WanVideo ImageToVideo Encode"
     }
   },
   "157": {
     "inputs": {
-      "filename": "wan_2.1_vae.safetensors"
+      "model_name": "wan_2.1_vae.safetensors",
+      "precision": "bf16",
+      "use_cpu_cache": false
     },
     "class_type": "WanVideoVAELoader",
     "_meta": {
-      "title": "WanVideoVAELoader"
+      "title": "WanVideo VAE Loader"
     }
   },
   "158": {
     "inputs": {
-      "value": false,
+      "enable_vae_tiling": false,
+      "tile_x": 272,
+      "tile_y": 272,
+      "tile_stride_x": 144,
+      "tile_stride_y": 128,
+      "normalization": "default",
       "vae": [
         "157",
         0
@@ -367,7 +425,7 @@
     },
     "class_type": "WanVideoDecode",
     "_meta": {
-      "title": "WanVideoDecode"
+      "title": "WanVideo Decode"
     }
   }
 }
